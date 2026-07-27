@@ -9,6 +9,13 @@ import FacultyPage from './pages/FacultyPage';
 import Login from './pages/Login';
 import ChangePasswordPage from './pages/ChangePasswordPage';
 import PromotionPage from './pages/PromotionPage';
+import { 
+  AboutPage, 
+  PublicDepartmentsPage, 
+  GalleryPage, 
+  ContactPage, 
+  AdmissionPage 
+} from './pages/PublicPages';
 import {
   DepartmentsPage,
   CoursesPage,
@@ -48,13 +55,18 @@ const ProtectedRoute = ({ children }) => {
 export default function App() {
   return (
     <Routes>
-      {/* 1. Explore Landing Page at URL '/' */}
+      {/* 1. Public Standalone Pages (Completely Separate from ERP) */}
       <Route path="/" element={<LandingPage />} />
+      <Route path="/about" element={<AboutPage />} />
+      <Route path="/public-departments" element={<PublicDepartmentsPage />} />
+      <Route path="/gallery" element={<GalleryPage />} />
+      <Route path="/contact" element={<ContactPage />} />
+      <Route path="/admission" element={<AdmissionPage />} />
 
       {/* 2. Standalone Login Page without Top Navbar */}
       <Route path="/login" element={<Login />} />
 
-      {/* 3. First Login Change Password Route */}
+      {/* 3. First Login Password Change Route */}
       <Route 
         path="/change-password" 
         element={
@@ -64,7 +76,7 @@ export default function App() {
         } 
       />
 
-      {/* 4. Protected College ERP Role-Based Dashboards & Admin Routes */}
+      {/* 4. Protected College ERP Role Dashboards & Department Isolated Modules */}
       <Route
         path="/*"
         element={
@@ -72,6 +84,9 @@ export default function App() {
             <DashboardLayout>
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/student/dashboard" element={<Dashboard />} />
+                <Route path="/faculty/dashboard" element={<Dashboard />} />
+                <Route path="/hod/dashboard" element={<Dashboard />} />
                 <Route path="/promotions" element={<PromotionPage />} />
                 <Route path="/students" element={<StudentsPage />} />
                 <Route path="/faculty" element={<FacultyPage />} />
@@ -93,7 +108,6 @@ export default function App() {
                 <Route path="/user-management" element={<UserManagementPage />} />
                 <Route path="/activity-logs" element={<ActivityLogsPage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />
-                <Route path="/about" element={<Navigate to="/" replace />} />
               </Routes>
             </DashboardLayout>
           </ProtectedRoute>
