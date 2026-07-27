@@ -7,6 +7,8 @@ import Dashboard from './pages/Dashboard';
 import StudentsPage from './pages/StudentsPage';
 import FacultyPage from './pages/FacultyPage';
 import Login from './pages/Login';
+import ChangePasswordPage from './pages/ChangePasswordPage';
+import PromotionPage from './pages/PromotionPage';
 import {
   DepartmentsPage,
   CoursesPage,
@@ -29,10 +31,17 @@ import {
 } from './pages/ErpModules';
 
 const ProtectedRoute = ({ children }) => {
-  const { currentUser } = useAuth();
+  const { currentUser, isFirstLogin } = useAuth();
+
   if (!currentUser) {
     return <Navigate to="/login" replace />;
   }
+
+  // Force first login password update redirect
+  if (isFirstLogin && window.location.pathname !== '/change-password') {
+    return <Navigate to="/change-password" replace />;
+  }
+
   return children;
 };
 
@@ -45,7 +54,17 @@ export default function App() {
       {/* 2. Standalone Login Page without Top Navbar */}
       <Route path="/login" element={<Login />} />
 
-      {/* 3. Protected College ERP Dashboard & Admin Routes */}
+      {/* 3. First Login Change Password Route */}
+      <Route 
+        path="/change-password" 
+        element={
+          <ProtectedRoute>
+            <ChangePasswordPage />
+          </ProtectedRoute>
+        } 
+      />
+
+      {/* 4. Protected College ERP Role-Based Dashboards & Admin Routes */}
       <Route
         path="/*"
         element={
@@ -53,6 +72,7 @@ export default function App() {
             <DashboardLayout>
               <Routes>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/promotions" element={<PromotionPage />} />
                 <Route path="/students" element={<StudentsPage />} />
                 <Route path="/faculty" element={<FacultyPage />} />
                 <Route path="/departments" element={<DepartmentsPage />} />
