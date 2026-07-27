@@ -2,6 +2,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './context/AuthContext';
 import DashboardLayout from './layouts/DashboardLayout';
+import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import StudentsPage from './pages/StudentsPage';
 import FacultyPage from './pages/FacultyPage';
@@ -38,14 +39,20 @@ const ProtectedRoute = ({ children }) => {
 export default function App() {
   return (
     <Routes>
+      {/* 1. Explore Landing Page at URL '/' */}
+      <Route path="/" element={<LandingPage />} />
+
+      {/* 2. Standalone Login Page without Top Navbar */}
       <Route path="/login" element={<Login />} />
+
+      {/* 3. Protected College ERP Dashboard & Admin Routes */}
       <Route
         path="/*"
         element={
           <ProtectedRoute>
             <DashboardLayout>
               <Routes>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/students" element={<StudentsPage />} />
                 <Route path="/faculty" element={<FacultyPage />} />
                 <Route path="/departments" element={<DepartmentsPage />} />
@@ -66,6 +73,7 @@ export default function App() {
                 <Route path="/user-management" element={<UserManagementPage />} />
                 <Route path="/activity-logs" element={<ActivityLogsPage />} />
                 <Route path="/notifications" element={<NotificationsPage />} />
+                <Route path="/about" element={<Navigate to="/" replace />} />
               </Routes>
             </DashboardLayout>
           </ProtectedRoute>
