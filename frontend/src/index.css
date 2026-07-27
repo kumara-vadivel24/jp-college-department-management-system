@@ -8,6 +8,8 @@
   --secondary-sky: #E0F2FE;
   --accent-sky: #0EA5E9;
   --navbar-red: #DC2626;
+  --navbar-red-hover: #B91C1C;
+  --navbar-red-active: #991B1B;
   --card-bg: #FFFFFF;
   --border-color: #E5E7EB;
   --text-main: #111827;
@@ -29,6 +31,54 @@ body {
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+/* Red Navigation Button Utility System */
+.nav-red-btn {
+  background-color: #DC2626;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  font-size: 0.8125rem;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  items-center: center;
+  gap: 6px;
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.15);
+}
+
+.nav-red-btn:hover {
+  background-color: #B91C1C;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
+}
+
+.nav-red-btn.active {
+  background-color: #991B1B;
+  color: #FFFFFF;
+  border-bottom: 3px solid #FFFFFF;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(153, 27, 27, 0.4);
+}
+
+/* Action Button Red Utility */
+.btn-red-action {
+  background-color: #DC2626;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+.btn-red-action:hover {
+  background-color: #B91C1C;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.35);
 }
 
 /* Custom Table Styles */
@@ -72,13 +122,4 @@ input, select, textarea {
 input:focus, select:focus, textarea:focus {
   border-color: var(--accent-sky) !important;
   box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
-}
-
-/* Card Hover Animation */
-.hover-card {
-  transition: all 0.25s ease-in-out;
-}
-.hover-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgba(14, 165, 233, 0.1), 0 8px 10px -6px rgba(14, 165, 233, 0.1);
 }
