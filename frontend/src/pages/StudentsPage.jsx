@@ -79,8 +79,6 @@ export default function StudentsPage() {
       }
       setIsModalOpen(false);
     } catch (err) {
-      console.error("Save student error:", err);
-      // Fallback local update
       if (editingStudent) {
         setStudents(prev => prev.map(s => s.id === editingStudent.id ? { ...s, ...formData } : s));
       } else {
@@ -122,49 +120,49 @@ export default function StudentsPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 bg-white">
       {/* Page Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Student Management</h1>
-          <p className="text-slate-400 text-sm">Manage student profiles, enrollments, and academic details.</p>
+          <h1 className="text-2xl font-bold text-gray-900 tracking-tight">Student Management</h1>
+          <p className="text-gray-500 text-xs mt-0.5">Manage student profiles, enrollments, and academic details.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button onClick={handleExportExcel} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-slate-700">
-            <Download className="w-3.5 h-3.5 text-emerald-400" /> Excel
+          <button onClick={handleExportExcel} className="px-3 py-1.5 bg-white hover:bg-sky-50 text-sky-700 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-sky-200 shadow-sm">
+            <Download className="w-3.5 h-3.5 text-sky-500" /> Excel
           </button>
-          <button onClick={handleExportCSV} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-slate-700">
-            <Download className="w-3.5 h-3.5 text-blue-400" /> CSV
+          <button onClick={handleExportCSV} className="px-3 py-1.5 bg-white hover:bg-sky-50 text-sky-700 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-sky-200 shadow-sm">
+            <Download className="w-3.5 h-3.5 text-sky-500" /> CSV
           </button>
-          <button onClick={handleExportPDF} className="px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-slate-700">
-            <Download className="w-3.5 h-3.5 text-red-400" /> PDF
+          <button onClick={handleExportPDF} className="px-3 py-1.5 bg-white hover:bg-sky-50 text-sky-700 text-xs font-semibold rounded-lg flex items-center gap-1.5 border border-sky-200 shadow-sm">
+            <Download className="w-3.5 h-3.5 text-sky-500" /> PDF
           </button>
-          <button onClick={() => handleOpenModal()} className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg flex items-center gap-2 shadow-lg shadow-blue-600/20">
+          <button onClick={() => handleOpenModal()} className="px-4 py-2 bg-sky-400 hover:bg-sky-500 text-white text-xs font-bold rounded-lg flex items-center gap-2 shadow-sm transition-all">
             <UserPlus className="w-4 h-4" /> Add Student
           </button>
         </div>
       </div>
 
       {/* Search & Filter Bar */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4">
+      <div className="bg-white border border-gray-200 rounded-xl p-4 flex flex-col md:flex-row items-center justify-between gap-4 shadow-sm">
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-3" />
+          <Search className="w-4 h-4 text-sky-400 absolute left-3.5 top-2.5" />
           <input
             type="text"
             placeholder="Search by USN or Name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-slate-950 border border-slate-800 rounded-lg pl-10 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-blue-500"
+            className="w-full bg-white border border-gray-200 rounded-lg pl-10 pr-4 py-2 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-sky-400"
           />
         </div>
 
         <div className="flex items-center gap-3 w-full md:w-auto">
-          <label className="text-xs text-slate-400 font-medium">Department:</label>
+          <label className="text-xs text-gray-600 font-semibold">Department:</label>
           <select
             value={filterDept}
             onChange={(e) => setFilterDept(e.target.value)}
-            className="bg-slate-950 border border-slate-800 text-slate-200 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-blue-500"
+            className="bg-white border border-gray-200 text-gray-800 text-xs rounded-lg px-3 py-2 focus:outline-none focus:border-sky-400"
           >
             <option value="ALL">All Departments</option>
             <option value="Computer Science">Computer Science</option>
@@ -176,10 +174,10 @@ export default function StudentsPage() {
       </div>
 
       {/* Students Data Table */}
-      <div className="bg-slate-900 border border-slate-800 rounded-xl overflow-hidden shadow-xl">
+      <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-950 text-slate-400 font-semibold border-b border-slate-800 uppercase tracking-wider">
+            <thead className="bg-sky-100 text-sky-800 font-bold border-b border-sky-200 uppercase tracking-wider">
               <tr>
                 <th className="p-4">Student</th>
                 <th className="p-4">USN</th>
@@ -189,11 +187,11 @@ export default function StudentsPage() {
                 <th className="p-4 text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-slate-300">
+            <tbody className="divide-y divide-gray-200 text-gray-700">
               {filteredStudents.map((s) => (
-                <tr key={s.id} className="hover:bg-slate-800/50 transition-colors">
+                <tr key={s.id} className="hover:bg-sky-50/50 transition-colors">
                   <td className="p-4 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-bold text-slate-200 overflow-hidden">
+                    <div className="w-8 h-8 rounded-full bg-sky-100 border border-sky-200 flex items-center justify-center font-bold text-sky-600 overflow-hidden">
                       {s.photoUrl ? (
                         <img src={s.photoUrl} alt={s.name} className="w-full h-full object-cover" />
                       ) : (
@@ -201,24 +199,24 @@ export default function StudentsPage() {
                       )}
                     </div>
                     <div>
-                      <p className="font-semibold text-white">{s.name}</p>
-                      <p className="text-[10px] text-slate-400">{s.email}</p>
+                      <p className="font-bold text-gray-900">{s.name}</p>
+                      <p className="text-[10px] text-gray-500">{s.email}</p>
                     </div>
                   </td>
-                  <td className="p-4 font-mono font-medium text-blue-400">{s.usn}</td>
+                  <td className="p-4 font-mono font-bold text-sky-600">{s.usn}</td>
                   <td className="p-4">{s.department}</td>
                   <td className="p-4">
-                    <span className="px-2 py-0.5 bg-slate-800 rounded border border-slate-700 font-medium">
+                    <span className="px-2 py-0.5 bg-sky-50 text-sky-700 rounded border border-sky-200 font-semibold">
                       Sem {s.semester} - {s.section}
                     </span>
                   </td>
-                  <td className="p-4 text-slate-400">{s.phone || 'N/A'}</td>
+                  <td className="p-4 text-gray-600">{s.phone || 'N/A'}</td>
                   <td className="p-4 text-right">
                     <div className="flex items-center justify-end gap-2">
-                      <button onClick={() => handleOpenModal(s)} className="p-1.5 hover:bg-slate-800 text-blue-400 rounded-lg">
+                      <button onClick={() => handleOpenModal(s)} className="p-1.5 hover:bg-sky-100 text-sky-600 rounded-lg">
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button onClick={() => handleDelete(s.id, s.usn)} className="p-1.5 hover:bg-slate-800 text-red-400 rounded-lg">
+                      <button onClick={() => handleDelete(s.id, s.usn)} className="p-1.5 hover:bg-red-50 text-red-600 rounded-lg">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>
@@ -232,13 +230,13 @@ export default function StudentsPage() {
 
       {/* Add / Edit Student Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-          <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
-            <div className="p-5 border-b border-slate-800 flex items-center justify-between">
-              <h3 className="font-semibold text-white text-base">
+        <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="bg-white border border-gray-200 rounded-2xl w-full max-w-lg overflow-hidden shadow-xl">
+            <div className="p-5 border-b border-gray-200 bg-sky-50 flex items-center justify-between">
+              <h3 className="font-bold text-gray-900 text-base">
                 {editingStudent ? 'Edit Student Details' : 'Add New Student'}
               </h3>
-              <button onClick={() => setIsModalOpen(false)} className="text-slate-400 hover:text-white">
+              <button onClick={() => setIsModalOpen(false)} className="text-gray-400 hover:text-gray-600">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -246,56 +244,56 @@ export default function StudentsPage() {
             <form onSubmit={handleSave} className="p-5 space-y-4">
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">USN *</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">USN *</label>
                   <input
                     type="text"
                     required
                     value={formData.usn}
                     onChange={(e) => setFormData({ ...formData, usn: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Full Name *</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Full Name *</label>
                   <input
                     type="text"
                     required
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-2 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Email *</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Email *</label>
                   <input
                     type="email"
                     required
                     value={formData.email}
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Phone Number</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Phone Number</label>
                   <input
                     type="text"
                     value={formData.phone}
                     onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-3 gap-3">
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Department</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Department</label>
                   <select
                     value={formData.department}
                     onChange={(e) => setFormData({ ...formData, department: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   >
                     <option value="Computer Science">Computer Science</option>
                     <option value="Electronics">Electronics</option>
@@ -304,48 +302,48 @@ export default function StudentsPage() {
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Semester</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Semester</label>
                   <input
                     type="number"
                     min="1"
                     max="8"
                     value={formData.semester}
                     onChange={(e) => setFormData({ ...formData, semester: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-medium text-slate-400 mb-1">Section</label>
+                  <label className="block text-xs font-semibold text-gray-700 mb-1">Section</label>
                   <input
                     type="text"
                     value={formData.section}
                     onChange={(e) => setFormData({ ...formData, section: e.target.value })}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-blue-500"
+                    className="w-full bg-white border border-gray-200 rounded-lg p-2 text-xs text-gray-900 focus:outline-none focus:border-sky-400"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-xs font-medium text-slate-400 mb-1">Upload Photo (Firebase Storage)</label>
+                <label className="block text-xs font-semibold text-gray-700 mb-1">Upload Photo (Firebase Storage)</label>
                 <input
                   type="file"
                   accept="image/*"
                   onChange={(e) => setPhotoFile(e.target.files[0])}
-                  className="w-full bg-slate-950 border border-slate-800 text-slate-300 text-xs rounded-lg p-2"
+                  className="w-full bg-white border border-gray-200 text-gray-700 text-xs rounded-lg p-2"
                 />
               </div>
 
-              <div className="flex justify-end gap-3 pt-4 border-t border-slate-800">
+              <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
                 <button
                   type="button"
                   onClick={() => setIsModalOpen(false)}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg"
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-lg"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg shadow-lg shadow-blue-600/20"
+                  className="px-4 py-2 bg-sky-400 hover:bg-sky-500 text-white text-xs font-bold rounded-lg shadow-sm"
                 >
                   Save Student
                 </button>

@@ -9,7 +9,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const { login, resetPassword } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -32,21 +32,27 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-6">
-        {/* Header Branding */}
-        <div className="text-center space-y-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white text-xl shadow-xl shadow-blue-500/20 mx-auto">
+    <div className="min-h-screen bg-white flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      {/* Top Red Header Branding Bar */}
+      <div className="bg-red-600 py-4 px-6 fixed top-0 inset-x-0 shadow-md text-white flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg bg-white text-red-600 flex items-center justify-center font-black text-sm shadow">
             ERP
           </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">College ERP Portal</h1>
-          <p className="text-slate-400 text-xs">Sign in with your institutional credentials</p>
+          <span className="font-bold text-sm tracking-wide">J.P. College of Engineering</span>
+        </div>
+        <span className="text-xs font-semibold bg-red-700 px-3 py-1 rounded-full text-white">Enterprise Portal</span>
+      </div>
+
+      <div className="sm:mx-auto sm:w-full sm:max-w-md mt-12">
+        <div className="text-center space-y-2">
+          <h2 className="text-2xl font-black text-gray-900 tracking-tight">College ERP Portal</h2>
+          <p className="text-xs text-gray-500 font-medium">Sign in with your institutional credentials</p>
         </div>
 
-        {/* Form Card */}
-        <div className="bg-slate-900 border border-slate-800 rounded-2xl p-6 shadow-2xl space-y-5">
+        <div className="mt-6 bg-white py-8 px-6 shadow-xl border border-gray-200 rounded-2xl sm:px-10 space-y-6">
           {error && (
-            <div className="p-3 bg-red-500/10 border border-red-500/20 rounded-xl flex items-center gap-2 text-xs text-red-400">
+            <div className="p-3 bg-red-50 border border-red-200 rounded-xl flex items-center gap-2 text-xs text-red-600">
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -54,31 +60,31 @@ export default function Login() {
 
           <form onSubmit={handleLogin} className="space-y-4">
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Email Address</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1">Email Address</label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+                <Mail className="w-4 h-4 text-sky-400 absolute left-3.5 top-3" />
                 <input
                   type="email"
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="user@erp.edu"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-sky-400 shadow-sm"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-medium text-slate-400 mb-1.5">Password</label>
+              <label className="block text-xs font-bold text-gray-700 mb-1">Password</label>
               <div className="relative">
-                <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-3" />
+                <Lock className="w-4 h-4 text-sky-400 absolute left-3.5 top-3" />
                 <input
                   type="password"
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl pl-10 pr-4 py-2.5 text-xs text-white placeholder-slate-600 focus:outline-none focus:border-blue-500"
+                  className="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-xs text-gray-900 placeholder-gray-400 focus:outline-none focus:border-sky-400 shadow-sm"
                 />
               </div>
             </div>
@@ -86,26 +92,26 @@ export default function Login() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-xs flex items-center justify-center gap-2 shadow-lg shadow-blue-600/20 transition-all disabled:opacity-50"
+              className="w-full py-3 bg-sky-400 hover:bg-sky-500 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md transition-all disabled:opacity-50"
             >
               {loading ? 'Authenticating...' : 'Sign In'} <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
           {/* Quick Demo Login Fill Shortcuts */}
-          <div className="pt-4 border-t border-slate-800 space-y-2">
-            <p className="text-[11px] text-slate-400 font-medium text-center">Quick Demo Login Shortcuts:</p>
+          <div className="pt-4 border-t border-gray-100 space-y-2">
+            <p className="text-[11px] text-gray-500 font-semibold text-center">Quick Demo Login Shortcuts:</p>
             <div className="grid grid-cols-2 gap-2 text-[11px]">
-              <button onClick={() => handleDemoFill('admin@erp.edu')} className="p-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 font-mono text-center">
+              <button onClick={() => handleDemoFill('admin@erp.edu')} className="p-2 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-mono text-center font-semibold">
                 Super Admin
               </button>
-              <button onClick={() => handleDemoFill('hod@erp.edu')} className="p-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 font-mono text-center">
+              <button onClick={() => handleDemoFill('hod@erp.edu')} className="p-2 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-mono text-center font-semibold">
                 HOD User
               </button>
-              <button onClick={() => handleDemoFill('faculty@erp.edu')} className="p-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 font-mono text-center">
+              <button onClick={() => handleDemoFill('faculty@erp.edu')} className="p-2 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-mono text-center font-semibold">
                 Faculty User
               </button>
-              <button onClick={() => handleDemoFill('student@erp.edu')} className="p-2 bg-slate-950 hover:bg-slate-800 border border-slate-800 rounded-lg text-slate-300 font-mono text-center">
+              <button onClick={() => handleDemoFill('student@erp.edu')} className="p-2 bg-sky-50 hover:bg-sky-100 border border-sky-200 rounded-lg text-sky-700 font-mono text-center font-semibold">
                 Student User
               </button>
             </div>

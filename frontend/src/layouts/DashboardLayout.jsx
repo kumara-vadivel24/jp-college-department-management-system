@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
@@ -24,40 +24,38 @@ import {
   History, 
   Bell, 
   LogOut,
+  Search,
+  ChevronLeft,
   ChevronRight,
-  Menu,
-  X
+  ShieldCheck
 } from 'lucide-react';
 
 const navItems = [
   { name: 'Dashboard', path: '/', icon: LayoutDashboard, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
+  { name: 'Approvals', path: '/approvals', icon: CheckSquare, roles: ['SuperAdmin', 'Hod'] },
   { name: 'Students', path: '/students', icon: Users, roles: ['SuperAdmin', 'Hod', 'Faculty'] },
   { name: 'Faculty', path: '/faculty', icon: UserCheck, roles: ['SuperAdmin', 'Hod'] },
   { name: 'Departments', path: '/departments', icon: Building2, roles: ['SuperAdmin', 'Hod'] },
-  { name: 'Courses', path: '/courses', icon: GraduationCap, roles: ['SuperAdmin', 'Hod', 'Faculty'] },
   { name: 'Subjects', path: '/subjects', icon: BookOpen, roles: ['SuperAdmin', 'Hod', 'Faculty'] },
-  { name: 'Semester', path: '/semesters', icon: CalendarDays, roles: ['SuperAdmin', 'Hod'] },
+  { name: 'Courses', path: '/courses', icon: GraduationCap, roles: ['SuperAdmin', 'Hod', 'Faculty'] },
   { name: 'Attendance', path: '/attendance', icon: ClipboardCheck, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
   { name: 'Internal Marks', path: '/internal-marks', icon: Award, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
   { name: 'Semester Marks', path: '/semester-marks', icon: FileCheck2, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
-  { name: 'Assignments', path: '/assignments', icon: FileText, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
   { name: 'Subject Notes', path: '/notes', icon: FileDown, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
+  { name: 'Assignments', path: '/assignments', icon: FileText, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
   { name: 'Timetable', path: '/timetable', icon: Calendar, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
+  { name: 'Import / Export', path: '/import-export', icon: FileSpreadsheet, roles: ['SuperAdmin', 'Hod'] },
   { name: 'Reports', path: '/reports', icon: BarChart3, roles: ['SuperAdmin', 'Hod', 'Faculty'] },
   { name: 'Downloads', path: '/downloads', icon: Download, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
-  { name: 'Import / Export', path: '/import-export', icon: FileSpreadsheet, roles: ['SuperAdmin', 'Hod'] },
-  { name: 'Approvals', path: '/approvals', icon: CheckSquare, roles: ['SuperAdmin', 'Hod'] },
-  { name: 'Settings', path: '/settings', icon: Settings, roles: ['SuperAdmin'] },
-  { name: 'User Management', path: '/user-management', icon: UserCog, roles: ['SuperAdmin'] },
   { name: 'Activity Logs', path: '/activity-logs', icon: History, roles: ['SuperAdmin', 'Hod'] },
-  { name: 'Notifications', path: '/notifications', icon: Bell, roles: ['SuperAdmin', 'Hod', 'Faculty', 'Student'] },
+  { name: 'Settings', path: '/settings', icon: Settings, roles: ['SuperAdmin'] },
 ];
 
 export default function DashboardLayout({ children }) {
   const { userProfile, role, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const scrollRef = useRef(null);
 
   const filteredNavItems = navItems.filter(item => !role || item.roles.includes(role));
 
@@ -66,122 +64,132 @@ export default function DashboardLayout({ children }) {
     navigate('/login');
   };
 
-  return (
-    <div className="min-h-screen bg-slate-900 text-slate-100 flex overflow-hidden">
-      {/* Mobile backdrop */}
-      {sidebarOpen && (
-        <div 
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-40 lg:hidden"
-          onClick={() => setSidebarOpen(false)}
-        />
-      )}
+  const scrollLeft = () => {
+    if (scrollRef.current) scrollRef.current.scrollBy({ left: -250, behavior: 'smooth' });
+  };
 
-      {/* Sidebar */}
-      <aside className={`
-        fixed lg:static inset-y-0 left-0 z-50 w-72 bg-slate-900 border-r border-slate-800 flex flex-col transition-transform duration-300 ease-in-out
-        ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}>
-        {/* Sidebar Header */}
-        <div className="h-16 px-6 border-b border-slate-800 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center font-bold text-white shadow-lg shadow-blue-500/20">
+  const scrollRight = () => {
+    if (scrollRef.current) scrollRef.current.scrollBy({ left: 250, behavior: 'smooth' });
+  };
+
+  const currentDateStr = new Date().toLocaleDateString('en-US', {
+    weekday: 'short',
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric'
+  });
+
+  return (
+    <div className="min-h-screen bg-white text-gray-900 flex flex-col font-sans">
+      {/* Fixed Sticky Bright Red Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-red-600 shadow-md text-white border-b border-red-700">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between h-14">
+          {/* Logo & Institution Name */}
+          <Link to="/" className="flex items-center gap-2.5 font-bold tracking-tight text-white hover:opacity-95 transition-opacity">
+            <div className="w-8 h-8 rounded-lg bg-white text-red-600 flex items-center justify-center font-extrabold text-sm shadow">
               ERP
             </div>
-            <div>
-              <h1 className="font-bold text-white tracking-wide text-base leading-tight">College ERP</h1>
-              <p className="text-xs text-blue-400 font-medium">Enterprise System</p>
-            </div>
+            <span className="hidden sm:inline font-semibold text-base">J.P. College of Engineering</span>
           </Link>
-          <button 
-            onClick={() => setSidebarOpen(false)}
-            className="lg:hidden text-slate-400 hover:text-white"
-          >
-            <X className="w-6 h-6" />
-          </button>
-        </div>
 
-        {/* Navigation Items */}
-        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-1 custom-scrollbar">
-          {filteredNavItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = location.pathname === item.path;
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                onClick={() => setSidebarOpen(false)}
-                className={`
-                  flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200
-                  ${isActive 
-                    ? 'bg-blue-600/15 text-blue-400 border border-blue-500/30 shadow-sm' 
-                    : 'text-slate-400 hover:bg-slate-800/60 hover:text-slate-200'}
-                `}
-              >
-                <Icon className={`w-5 h-5 ${isActive ? 'text-blue-400' : 'text-slate-400'}`} />
-                <span className="flex-1">{item.name}</span>
-                {isActive && <ChevronRight className="w-4 h-4 text-blue-400" />}
-              </Link>
-            );
-          })}
-        </div>
+          {/* Roller Horizontal Scroll Navigation Bar */}
+          <div className="flex-1 max-w-4xl mx-4 relative flex items-center">
+            <button 
+              onClick={scrollLeft}
+              className="p-1 rounded-full bg-red-700 text-white hover:bg-red-800 shrink-0 mr-1 focus:outline-none shadow-sm"
+              title="Scroll Left"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
 
-        {/* User Card & Logout */}
-        <div className="p-4 border-t border-slate-800 bg-slate-900/50">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3 overflow-hidden">
-              <div className="w-9 h-9 rounded-full bg-slate-800 border border-slate-700 flex items-center justify-center font-semibold text-slate-300 text-sm">
-                {(userProfile?.name || 'U').charAt(0).toUpperCase()}
-              </div>
-              <div className="truncate">
-                <p className="text-sm font-semibold text-slate-200 truncate">{userProfile?.name || 'User'}</p>
-                <span className="inline-block px-2 py-0.5 text-[10px] font-semibold bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">
-                  {role || 'Guest'}
-                </span>
-              </div>
+            <div 
+              ref={scrollRef}
+              className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1 scroll-smooth w-full"
+            >
+              {filteredNavItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`
+                      flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200
+                      ${isActive 
+                        ? 'bg-white text-red-600 shadow-sm font-bold scale-105' 
+                        : 'text-white hover:bg-red-500/80 hover:text-white'}
+                    `}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span>{item.name}</span>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <button 
+              onClick={scrollRight}
+              className="p-1 rounded-full bg-red-700 text-white hover:bg-red-800 shrink-0 ml-1 focus:outline-none shadow-sm"
+              title="Scroll Right"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+
+          {/* User Profile & Logout */}
+          <div className="flex items-center gap-3">
+            <div className="hidden md:flex flex-col text-right">
+              <span className="text-xs font-bold leading-tight">{userProfile?.name || 'User'}</span>
+              <span className="text-[10px] text-red-100 font-medium">{role || 'Admin'}</span>
             </div>
             <button 
-              onClick={handleLogout}
+              onClick={handleLogout} 
               title="Logout"
-              className="p-2 text-slate-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+              className="p-1.5 rounded-full bg-red-700 hover:bg-red-800 text-white transition-colors"
             >
-              <LogOut className="w-5 h-5" />
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </div>
-      </aside>
+      </nav>
 
-      {/* Main Content Container */}
-      <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
-        {/* Top Navbar */}
-        <header className="h-16 border-b border-slate-800 bg-slate-900/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-30">
+      {/* Sub Header Section */}
+      <header className="mt-14 bg-sky-50 border-b border-sky-100 px-6 py-4">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-bold text-gray-900 tracking-tight">J.P. College of Engineering</h1>
+            <p className="text-xs text-sky-600 font-medium">College ERP Management System &bull; Admin Portal</p>
+          </div>
+
+          {/* Search, Notifications & Date */}
           <div className="flex items-center gap-4">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800"
-            >
-              <Menu className="w-6 h-6" />
-            </button>
-            <h2 className="text-lg font-semibold text-white truncate">
-              {filteredNavItems.find(i => i.path === location.pathname)?.name || 'College ERP System'}
-            </h2>
-          </div>
+            <div className="relative w-full md:w-64">
+              <Search className="w-4 h-4 text-sky-400 absolute left-3 top-2.5" />
+              <input
+                type="text"
+                placeholder="Search ERP..."
+                className="w-full bg-white border border-gray-200 rounded-full pl-9 pr-4 py-1.5 text-xs text-gray-800 placeholder-gray-400 focus:outline-none focus:border-sky-400 shadow-sm"
+              />
+            </div>
 
-          <div className="flex items-center gap-3">
-            <Link to="/notifications" className="p-2 text-slate-400 hover:text-white hover:bg-slate-800 rounded-lg relative">
-              <Bell className="w-5 h-5" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full animate-ping" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-blue-500 rounded-full" />
+            <Link to="/notifications" className="p-2 bg-white hover:bg-sky-100 border border-gray-200 rounded-full text-sky-500 relative transition-colors shadow-sm">
+              <Bell className="w-4 h-4" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full" />
             </Link>
-          </div>
-        </header>
 
-        {/* Dynamic Page Content Area */}
-        <main className="flex-1 overflow-y-auto p-6 bg-slate-950">
-          <div className="max-w-7xl mx-auto space-y-6">
-            {children}
+            <span className="hidden lg:inline-block px-3 py-1 bg-white border border-sky-100 rounded-full text-xs font-semibold text-sky-700 shadow-sm">
+              {currentDateStr}
+            </span>
           </div>
-        </main>
-      </div>
+        </div>
+      </header>
+
+      {/* Main Page Area */}
+      <main className="flex-1 bg-white p-6">
+        <div className="max-w-7xl mx-auto space-y-6">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }
